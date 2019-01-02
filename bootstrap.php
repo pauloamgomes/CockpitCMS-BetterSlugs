@@ -1,12 +1,10 @@
 <?php
 
-function slugUniqId() {
-  return uniqid();
-}
-
 /**
- * Better Slugs module functions.
+ * @file
+ * Cockpit module bootstrap implementation.
  */
+
 $this->module('betterslugs')->extend([
   'slugify' => function($name, $entry, $isUpdate) {
     // Get the collection.
