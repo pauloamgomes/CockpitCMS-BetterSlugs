@@ -39,13 +39,14 @@ And using a custom callback function:
 Assuming you have the slugUniqId function (e.g. in a boostrap.php addon file):
 
 ```php
-function slugUniqId() {
+function slugUniqId($entry) {
   return uniqid();
 }
 ```
 
 it will return in something like `blogs/5c2ccc816619b/your-post-title`
 
+The callback function receives the $entry array as argument.
 
 Currently the following tokens are supported:
 

@@ -46,7 +46,7 @@ $this->module('betterslugs')->extend([
 
               case 'callback':
                 if (function_exists($tokenValue)) {
-                  $part = call_user_func($tokenValue);
+                  $part = call_user_func($tokenValue, $entry);
                 }
                 break;
             }
