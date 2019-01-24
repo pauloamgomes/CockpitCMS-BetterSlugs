@@ -26,9 +26,10 @@ $this->module('betterslugs')->extend([
       if (empty($entry[$fieldName])) {
         $newParts = [];
         foreach ($parts as $part) {
-          if ((bool) preg_match('/\[([a-z]+):([a-zA-Z-0-9_]+)\]/', $part)) {
+          if ((bool) preg_match('/\[([a-zA-Z]+):([a-zA-Z-0-9_\|]+)\]/', $part)) {
             $part = str_replace(['[', ']'], '', $part);
             list($tokenKey, $tokenValue) = explode(":", $part);
+
             switch ($tokenKey) {
               case 'date':
                 $part = date($tokenValue);
@@ -37,6 +38,22 @@ $this->module('betterslugs')->extend([
               case 'field':
                 if (isset($entry[$tokenValue])) {
                   $part = $entry[$tokenValue];
+                }
+                break;
+
+              case 'linkedField':
+                list($colName, $colField) = explode("|", $tokenValue);
+                if (!isset($colName, $colField)) {
+                  break;
+                }
+
+                if (!empty($entry[$colName]['link'])) {
+                  $link = $entry[$colName]['link'];
+                  $id = $entry[$colName]['_id'];
+                  $linkedEntry = $this->app->module('collections')->findOne($link, ["_id" => $id]);
+                  if ($linkedEntry && isset($linkedEntry[$colField]) && !is_array($linkedEntry[$colField])) {
+                    $part = $linkedEntry[$colField];
+                  }
                 }
                 break;
 

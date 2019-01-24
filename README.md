@@ -53,6 +53,12 @@ Currently the following tokens are supported:
 - collection:value - where value is present in the collection structure (e.g. name)
 - date:value - where value is any valid php date char (e.g. Y, m, d, YMD, etc..)
 - field:value - where value is the field name (e.g. title)
+- linkedField:value|param - where value is the linked field collection name and param is the value from the linked collection, e.g.:
+```json
+"format": "countries/[linkedField:country|name]]/[field:title]"
+```
+If we have a field named country that is a collection link, it will retrieve the collection link entry values and extract the name field, so it would result in something like: `countries/netherlands/my-title`
+
 - callback:value - where value is a custom callback function
 
 By default the generated slugs are unique, so if you have a slug field configured with format:

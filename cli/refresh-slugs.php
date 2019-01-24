@@ -54,6 +54,9 @@ foreach ($entries as $idx => $entry) {
     CLI::writeln("Slug for {$entry['_id']} updated to '{$entry[$slugField['name']]}'", TRUE);
     $updated++;
   }
+  else {
+    CLI::wirteln("${entry._id} - Field {$slugField['name']} not found!");
+  }
 }
 
 $seconds = round(microtime(TRUE) - $start, 3);
