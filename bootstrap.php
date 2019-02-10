@@ -80,7 +80,7 @@ $this->module('betterslugs')->extend([
       $criteria[$fieldName] = $slug;
       // If is an update exclude current entry.
       if ($isUpdate) {
-        $criteria['_id'] = ['$ne' => new \MongoDB\BSON\ObjectID($entry["_id"])];
+        $criteria['_id'] = ['$ne' => (string) new \MongoDB\BSON\ObjectID($entry["_id"])];
       }
       $count = $this->app->module('collections')->count($name, $criteria);
       if ($count > 0) {
