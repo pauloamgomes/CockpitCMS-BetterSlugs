@@ -77,21 +77,18 @@ $this->module('betterslugs')->extend([
       }
 
       // Check if slug is unique.
-      $criteria[$fieldName] = $slug;
-      // If is an update exclude current entry.
-      if ($isUpdate) {
-        $criteria['_id'] = ['$ne' => (string) new \MongoDB\BSON\ObjectID($entry["_id"])];
-      }
+      $criteria = [$fieldName => $slug];
       $count = $this->app->module('collections')->count($name, $criteria);
-      if ($count > 0) {
+      if (($isUpdate && $count > 1) || (!$isUpdate && $count > 0)) {
         $_slug = $slug;
         $slug = "{$slug}-{$count}";
         // Second check as we have now the numeric prefix value.
-        $criteria[$fieldName] = new MongoDB\BSON\Regex("^{$_slug}-[0-9]+$");
-        $count = $this->app->module('collections')->count($name, $criteria);
-        if ($count > 0) {
-          $count++;
-          $slug = "{$_slug}-{$count}";
+        while ($count > 0) {
+          $criteria[$fieldName] = $slug;
+          $count = $this->app->module('collections')->count($name, $criteria);
+          if ($count > 0) {
+            $slug = "{$_slug}-{$count+1}";
+          }
         }
       }
 
