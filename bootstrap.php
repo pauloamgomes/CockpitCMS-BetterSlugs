@@ -80,14 +80,24 @@ $this->module('betterslugs')->extend([
       $criteria[$fieldName] = $slug;
       // If is an update exclude current entry.
       if ($isUpdate) {
-        $criteria['_id'] = ['$ne' => new \MongoDB\BSON\ObjectID($entry["_id"])];
+        if ($this->app->storage->type === 'mongodb') {
+          $criteria['_id'] = ['$ne' => new \MongoDB\BSON\ObjectID($entry["_id"])];
+        }
+        else {
+          $criteria['_id'] = ['$ne' => $entry["_id"]];
+        }
       }
       $count = $this->app->module('collections')->count($name, $criteria);
       if ($count > 0) {
         $_slug = $slug;
         $slug = "{$slug}-{$count}";
         // Second check as we have now the numeric prefix value.
-        $criteria[$fieldName] = new MongoDB\BSON\Regex("^{$_slug}-[0-9]+$");
+        if ($this->app->storage->type === 'mongodb') {
+          $criteria[$fieldName] = new MongoDB\BSON\Regex("^{$_slug}-[0-9]+$");
+        }
+        else {
+          $criteria[$fieldName] = ['$regex' => "/^{$_slug}-[0-9]+$/"];
+        }
         $count = $this->app->module('collections')->count($name, $criteria);
         if ($count > 0) {
           $count++;
