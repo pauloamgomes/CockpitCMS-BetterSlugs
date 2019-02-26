@@ -63,7 +63,10 @@ $this->module('betterslugs')->extend([
 
               case 'callback':
                 if (function_exists($tokenValue)) {
-                  $part = call_user_func($tokenValue, $entry);
+                  $part = call_user_func($tokenValue, $entry, $this->app);
+                }
+                else {
+                  $part = '';
                 }
                 break;
             }
@@ -116,10 +119,16 @@ $this->module('betterslugs')->extend([
 // CLI includes.
 if (COCKPIT_CLI) {
   $this->path('#cli', __DIR__ . '/cli');
-  include_once __DIR__ . '/admin.php';
+  include_once __DIR__ . '/actions.php';
 }
 
-// Include admin.
+// Admin includes.
 if (COCKPIT_ADMIN && !COCKPIT_API_REQUEST) {
   include_once __DIR__ . '/admin.php';
+  include_once __DIR__ . '/actions.php';
+}
+
+// API includes.
+if (COCKPIT_API_REQUEST) {
+  include_once __DIR__ . '/actions.php';
 }
