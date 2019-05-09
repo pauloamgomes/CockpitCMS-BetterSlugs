@@ -36,12 +36,14 @@ $this->module('betterslugs')->extend([
                 break;
 
               case 'field':
+                $part = '';
                 if (isset($entry[$tokenValue])) {
                   $part = $entry[$tokenValue];
                 }
                 break;
 
               case 'linkedField':
+                $part = '';
                 list($colName, $colField) = explode("|", $tokenValue);
                 if (!isset($colName, $colField)) {
                   break;
@@ -62,11 +64,9 @@ $this->module('betterslugs')->extend([
                 break;
 
               case 'callback':
+                $part = '';
                 if (function_exists($tokenValue)) {
                   $part = call_user_func($tokenValue, $entry, $this->app);
-                }
-                else {
-                  $part = '';
                 }
                 break;
             }
@@ -78,6 +78,8 @@ $this->module('betterslugs')->extend([
       else {
         $slug = $entry[$fieldName];
       }
+
+      $slug = str_replace('//', '/', $slug);
 
       // Check if slug is unique.
       $criteria[$fieldName] = $slug;
