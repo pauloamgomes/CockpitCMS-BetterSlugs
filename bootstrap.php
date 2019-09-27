@@ -133,4 +133,5 @@ if (COCKPIT_ADMIN && !COCKPIT_API_REQUEST) {
 // API includes.
 if (COCKPIT_API_REQUEST) {
   include_once __DIR__ . '/actions.php';
+  include_once __DIR__ . '/cockpitql.php';
 }
