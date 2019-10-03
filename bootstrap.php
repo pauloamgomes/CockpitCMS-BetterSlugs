@@ -5,113 +5,45 @@
  * Cockpit module bootstrap implementation.
  */
 
+require __DIR__ . '/vendor/autoload.php';
+
+$this->helpers['betterslugs'] = 'Cockpit\\BetterSlugs\\Utils';
+
 $this->module('betterslugs')->extend([
-  'slugify' => function($name, $entry, $isUpdate) {
-    // Get the collection.
-    $collection = $this->app->module('collections')->collection($name);
+  'slugify' => function($name, $entry, $field, $isUpdate) {
+    $localize = $field['localize'] ?? FALSE;
+    $format = $field['options']['format'];
+    $fieldName = $field['name'];
 
-    // Iterate over collection fields and confirm we have a slug type.
-    foreach ($collection['fields'] as $field) {
-      if ($field['type'] !== 'slug') {
-        continue;
-      }
-      if (empty($field['options']['format'])) {
-        continue;
-      }
+    // Only automate slug generation if field is empty.
+    if (empty($entry[$fieldName])) {
+      $slug = $this->app->helper('betterslugs')->generate($format, $entry);
+    }
+    else {
+      $slug = $entry[$fieldName];
+    }
 
-      $fieldName = $field['name'];
-      $parts = explode("/", $field['options']['format']);
+    $slug = $this->app->helper('betterslugs')->getUnique($name, $slug, $fieldName, $entry['_id']);
 
-      // We only automate slug generation if field is empty.
-      if (empty($entry[$fieldName])) {
-        $newParts = [];
-        foreach ($parts as $part) {
-          if ((bool) preg_match('/\[([a-zA-Z]+):([a-zA-Z-0-9_\|]+)\]/', $part)) {
-            $part = str_replace(['[', ']'], '', $part);
-            list($tokenKey, $tokenValue) = explode(":", $part);
+    // Update slug field with resulting slug value.
+    $entry[$fieldName] = $slug;
 
-            switch ($tokenKey) {
-              case 'date':
-                $part = date($tokenValue);
-                break;
-
-              case 'field':
-                $part = '';
-                if (isset($entry[$tokenValue])) {
-                  $part = $entry[$tokenValue];
-                }
-                break;
-
-              case 'linkedField':
-                $part = '';
-                list($colName, $colField) = explode("|", $tokenValue);
-                if (!isset($colName, $colField)) {
-                  break;
-                }
-
-                if (!empty($entry[$colName]['link'])) {
-                  $link = $entry[$colName]['link'];
-                  $id = $entry[$colName]['_id'];
-                  $linkedEntry = $this->app->module('collections')->findOne($link, ["_id" => $id]);
-                  if ($linkedEntry && isset($linkedEntry[$colField]) && !is_array($linkedEntry[$colField])) {
-                    $part = $linkedEntry[$colField];
-                  }
-                }
-                break;
-
-              case 'collection':
-                $part = $collection[$tokenValue] ?? $collection['name'];
-                break;
-
-              case 'callback':
-                $part = '';
-                if (function_exists($tokenValue)) {
-                  $part = call_user_func($tokenValue, $entry, $this->app);
-                }
-                break;
-            }
-          }
-          $newParts[] = $this->app->helper('utils')->sluggify($part);
+    if ($localize) {
+      // Get enabled locales.
+      $locales = array_keys($this->app->retrieve('languages', []));
+      foreach ($locales as $locale) {
+        $locFieldName = "{$fieldName}_{$locale}";
+        if (!array_key_exists($locFieldName, $entry)) {
+          continue;
         }
-        $slug = trim(implode('/', $newParts));
-      }
-      else {
-        $slug = $entry[$fieldName];
-      }
-
-      $slug = str_replace('//', '/', $slug);
-
-      // Check if slug is unique.
-      $criteria[$fieldName] = $slug;
-      // If is an update exclude current entry.
-      if ($isUpdate) {
-        if ($this->app->storage->type === 'mongodb') {
-          $criteria['_id'] = ['$ne' => new \MongoDB\BSON\ObjectID($entry["_id"])];
+        if (empty($entry[$locFieldName])) {
+          $slug = $this->app->helper('betterslugs')->generate($format, $entry, $locale);
         }
         else {
-          $criteria['_id'] = ['$ne' => $entry["_id"]];
+          $slug = $entry[$locFieldName] ?? $entry[$fieldName] ?? '';
         }
+        $entry[$locFieldName] = $slug;
       }
-      $count = $this->app->module('collections')->count($name, $criteria);
-      if ($count > 0) {
-        $_slug = $slug;
-        $slug = "{$slug}-{$count}";
-        // Second check as we have now the numeric prefix value.
-        if ($this->app->storage->type === 'mongodb') {
-          $criteria[$fieldName] = new MongoDB\BSON\Regex("^{$_slug}-[0-9]+$");
-        }
-        else {
-          $criteria[$fieldName] = ['$regex' => "/^{$_slug}-[0-9]+$/"];
-        }
-        $count = $this->app->module('collections')->count($name, $criteria);
-        if ($count > 0) {
-          $count++;
-          $slug = "{$_slug}-{$count}";
-        }
-      }
-
-      // Update slug field with resulting slug value.
-      $entry[$fieldName] = $slug;
     }
 
     return $entry;

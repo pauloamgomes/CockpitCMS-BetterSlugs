@@ -1,0 +1,20 @@
+{
+    "name": "pauloamgomes/CockpitCMS-BetterSlugs",
+    "type": "project",
+    "description": "Better slugs Addon for Cockpit CMS, provides a new slug field type.",
+    "keywords": ["cms", "headless", "api", "cockpit", "slugs-addon"],
+    "homepage": "https://github.com/pauloamgomes/CockpitCMS-BetterSlugs",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paulo Gomes",
+            "email": "pauloamgomes@gmail.com",
+            "homepage": "https://www.pauloamgomes.net"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "Helper"
+        ]
+    }
+}
