@@ -23,7 +23,7 @@ $this->module('betterslugs')->extend([
       $slug = $entry[$fieldName];
     }
 
-    $slug = $this->app->helper('betterslugs')->getUnique($name, $slug, $fieldName, $entry['_id']);
+    $slug = $this->app->helper('betterslugs')->getUnique($name, $slug, $fieldName, $entry['_id'] ?? NULL);
 
     // Update slug field with resulting slug value.
     $entry[$fieldName] = $slug;
