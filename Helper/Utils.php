@@ -100,7 +100,7 @@ class Utils extends \Lime\Helper {
       $slug = "{$slug}-{$count}";
       // Second check as we have now the numeric prefix value.
       if ($this->app->storage->type === 'mongodb') {
-        $criteria[$fieldName] = new MongoDB\BSON\Regex("^{$_slug}-[0-9]+$");
+        $criteria[$fieldName] = new \MongoDB\BSON\Regex("^{$_slug}-[0-9]+$");
       }
       else {
         $criteria[$fieldName] = ['$regex' => "/^{$_slug}-[0-9]+$/"];
