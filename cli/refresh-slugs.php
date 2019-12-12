@@ -53,7 +53,7 @@ foreach ($entries as $idx => $entry) {
     $updated++;
   }
   else {
-    CLI::wirteln("${entry._id} - Field {$slugField['name']} not found!");
+    CLI::writeln("${entry._id} - Field {$slugField['name']} not found!");
   }
 }
 
