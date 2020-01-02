@@ -10,7 +10,7 @@ if (!COCKPIT_CLI) {
   return;
 }
 
-$name = $app->param('name', TRUE);
+$name = $app->param('name', FALSE);
 
 if (!$name) {
   return CLI::writeln("--name parameter is missing", FALSE);
@@ -43,18 +43,13 @@ $entries = $entries->toArray();
 $updated = 0;
 
 CLI::writeln("");
-CLI::writeln("Collection '{$name}' - Refreshing slugs...");
+CLI::writeln("Collection '{$name}' - Refreshing slugs on field '{$slugField['name']}' ...");
 
 foreach ($entries as $idx => $entry) {
-  if (isset($entry[$slugField['name']])) {
-    $entry[$slugField['name']] = '';
-    $entry = $app->module('collections')->save($name, $entry);
-    CLI::writeln("Slug for {$entry['_id']} updated to '{$entry[$slugField['name']]}'", TRUE);
-    $updated++;
-  }
-  else {
-    CLI::writeln("${entry._id} - Field {$slugField['name']} not found!");
-  }
+  $entry[$slugField['name']] = '';
+  $entry = $app->module('collections')->save($name, $entry);
+  CLI::writeln("Slug for {$entry['_id']} updated to '{$entry[$slugField['name']]}'", TRUE);
+  $updated++;
 }
 
 $seconds = round(microtime(TRUE) - $start, 3);
