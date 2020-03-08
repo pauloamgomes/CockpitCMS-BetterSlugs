@@ -4,7 +4,7 @@ namespace Cockpit\BetterSlugs;
 
 class Utils extends \Lime\Helper {
 
-  public function generate($format, $entry, $lang = FALSE) {
+  public function generate($format, $name, $entry, $lang = FALSE) {
     $parts = explode("/", $format);
     $newParts = [];
     foreach ($parts as $part) {
@@ -57,6 +57,7 @@ class Utils extends \Lime\Helper {
             break;
 
           case 'collection':
+            $collection = $this->app->module('collections')->collection($name);
             $part = $collection[$tokenValue] ?? $collection['name'] ?? '';
             break;
 

@@ -17,7 +17,7 @@ $this->module('betterslugs')->extend([
 
     // Only automate slug generation if field is empty.
     if (empty($entry[$fieldName])) {
-      $slug = $this->app->helper('betterslugs')->generate($format, $entry);
+      $slug = $this->app->helper('betterslugs')->generate($format, $name, $entry);
     }
     else {
       $slug = $entry[$fieldName];
@@ -37,7 +37,7 @@ $this->module('betterslugs')->extend([
           continue;
         }
         if (empty($entry[$locFieldName])) {
-          $slug = $this->app->helper('betterslugs')->generate($format, $entry, $locale);
+          $slug = $this->app->helper('betterslugs')->generate($format, $name, $entry, $locale);
         }
         else {
           $slug = $entry[$locFieldName] ?? $entry[$fieldName] ?? '';
