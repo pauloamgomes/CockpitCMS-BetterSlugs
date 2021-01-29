@@ -6,7 +6,44 @@ Idea was partially taken by the Unique Slugs addon https://github.com/raffaelj/c
 
 ## Installation
 
-Download and unpack addon to `<cockpit-folder>/addons/BetterSlugs` folder.
+### Manual
+
+Download [latest release](https://github.com/pauloamgomes/CockpitCMS-BetterSlugs) and extract to `COCKPIT_PATH/addons/BetterSlugs` directory
+
+### Git
+
+```sh
+git clone https://github.com/pauloamgomes/CockpitCMS-BetterSlugs.git ./addons/BetterSlugs
+```
+
+### Cockpit CLI
+
+```sh
+php ./cp install/addon --name Honeypot --url https://github.com/pauloamgomes/CockpitCMS-BetterSlugs.git
+```
+
+### Composer
+
+1. Make sure path to cockpit addons is defined in your projects' _composer.json_ file:
+
+  ```json
+  {
+      "name": "MY_PROJECT",
+      "extra": {
+          "installer-paths": {
+              "cockpit/addons/{$name}": ["type:cockpit-module"]
+          }
+      }
+  }
+  ```
+
+2. In your project root run:
+
+  ```sh
+  composer require pauloamgomes/CockpitCMS-BetterSlugs
+  ```
+
+---
 
 ## Usage
 
