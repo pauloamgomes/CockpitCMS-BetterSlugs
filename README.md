@@ -40,7 +40,7 @@ php ./cp install/addon --name Honeypot --url https://github.com/pauloamgomes/Coc
 2. In your project root run:
 
   ```sh
-  composer require pauloamgomes/CockpitCMS-BetterSlugs
+  composer require pauloamgomes/cockpitcms-betterslugs
   ```
 
 ---
