@@ -1,5 +1,5 @@
 {
-    "name": "pauloamgomes/CockpitCMS-BetterSlugs",
+    "name": "pauloamgomes/cockpitcms-betterslugs",
     "description": "Better slugs Addon for Cockpit CMS, provides a new slug field type.",
     "keywords": ["cms", "headless", "api", "cockpit", "slugs-addon"],
     "homepage": "https://github.com/pauloamgomes/CockpitCMS-BetterSlugs",
