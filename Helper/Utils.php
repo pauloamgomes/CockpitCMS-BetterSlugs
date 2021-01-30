@@ -1,9 +1,19 @@
 <?php
 
-namespace Cockpit\BetterSlugs;
+namespace BetterSlugs\Helper;
 
 class Utils extends \Lime\Helper {
 
+  /**
+   * Slug generator
+   *
+   * @param  string  $format collection format
+   * @param  string  $name   collection name
+   * @param  object  $entry  collection entry
+   * @param  boolean $lang   localized slugs generation
+   *
+   * @return string generated slug
+   */
   public function generate($format, $name, $entry, $lang = FALSE) {
     $parts = explode("/", $format);
     $newParts = [];
@@ -78,6 +88,16 @@ class Utils extends \Lime\Helper {
     return $slug;
   }
 
+  /**
+   * Unique slug generator
+   *
+   * @param  string $name      collection name
+   * @param  string $slug      slug to check and make unique
+   * @param  string $fieldName name of the "slug" field
+   * @param  string $_id       collection "_id" of current entry (if previously saved)
+   *
+   * @return string uniquely generated slug
+   */
   public function getUnique($name, $slug, $fieldName, $_id = NULL) {
     $slug = str_replace('//', '/', $slug);
 

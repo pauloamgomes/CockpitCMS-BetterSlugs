@@ -5,9 +5,7 @@
  * Cockpit module bootstrap implementation.
  */
 
-require __DIR__ . '/vendor/autoload.php';
-
-$this->helpers['betterslugs'] = 'Cockpit\\BetterSlugs\\Utils';
+$this->helpers['betterslugs'] = 'BetterSlugs\\Helper\\Utils';
 
 $this->module('betterslugs')->extend([
   'slugify' => function($name, $entry, $field, $isUpdate) {
