@@ -19,7 +19,7 @@ git clone https://github.com/pauloamgomes/CockpitCMS-BetterSlugs.git ./addons/Be
 ### Cockpit CLI
 
 ```sh
-php ./cp install/addon --name Honeypot --url https://github.com/pauloamgomes/CockpitCMS-BetterSlugs.git
+php ./cp install/addon --name BetterSlugs --url https://github.com/pauloamgomes/CockpitCMS-BetterSlugs.git
 ```
 
 ### Composer
