@@ -1,8 +1,13 @@
 <?php
-
 /**
- * @file
- * Cockpit module bootstrap implementation.
+ * Cockpit better slugs addon
+ *
+ * @author  Paulo Gomes
+ * @package CockpitCMS-BetterSlugs
+ * @license MIT
+ *
+ * @source  https://github.com/pauloamgomes/CockpitCMS-BetterSlugs
+ * @see     { README.md } for usage info.
  */
 
 $this->helpers['betterslugs'] = 'BetterSlugs\\Helper\\Utils';
